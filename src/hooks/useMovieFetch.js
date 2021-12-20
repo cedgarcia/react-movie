@@ -10,10 +10,12 @@ const initialState = {
 };
 
 export const useMovieFetch = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  console.log(searchTerm);
   const fetchMovies = async (page, searchTerm = '') => {
     try {
       setError(false);
@@ -32,7 +34,8 @@ export const useMovieFetch = () => {
   };
   // Initial render
   useEffect(() => {
-    fetchMovies(1);
-  }, []);
-  return { state, loading, error };
+    setState(initialState);
+    fetchMovies(1, searchTerm);
+  }, [searchTerm]);
+  return { state, loading, error, setSearchTerm, searchTerm };
 };
