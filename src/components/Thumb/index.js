@@ -1,11 +1,18 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
 //Styles
 import { Image } from './Thumb.styles';
 
-const Thumb = ({ image, movieID, click }) => (
+const Thumb = ({ image, movieID, clickable }) => (
   <div>
-    <Image src={image} alt="movieThumbnail" />
+    {clickable ? (
+      <Link to={`/${movieID}`}>
+        <Image src={image} alt="movieThumbnail" />
+      </Link>
+    ) : (
+      <Image src={image} alt="movieThumbnail" />
+    )}
   </div>
 );
 

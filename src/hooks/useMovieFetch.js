@@ -1,51 +1,37 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import API from '../API';
 
-const initialState = {
-  page: 0,
-  results: [],
-  total_pages: 0,
-  total_results: 0,
-};
-
-export const useMovieFetch = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [state, setState] = useState(initialState);
-  const [loading, setLoading] = useState(false);
+export const useMovieFetch = (movieId) => {
+  const [state, setState] = useState({});
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  //Button fetching
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-
-  console.log(searchTerm);
-  const fetchMovies = async (page, searchTerm = '') => {
-    try {
-      setError(false);
-      setLoading(true);
-      const movies = await API.fetchMovies(searchTerm, page);
-
-      setState((prev) => ({
-        ...movies,
-        results:
-          page > 1 ? [...prev.results, ...movies.results] : [...movies.results],
-      }));
-    } catch (error) {
-      setError(true);
-    }
-    setLoading(false);
-  };
-  // Initial render
   useEffect(() => {
-    setState(initialState);
-    fetchMovies(1, searchTerm);
-  }, [searchTerm]);
+    const fetchMovie = async () => {
+      try {
+        setLoading(true);
+        setError(false);
 
-  // load more
-  useEffect(() => {
-    if (!isLoadingMore) return;
-    fetchMovies(state.page + 1, searchTerm);
-    setIsLoadingMore(false);
-  }, [isLoadingMore, searchTerm, state.page]);
-  return { state, loading, error, setSearchTerm, searchTerm, setIsLoadingMore };
+        const movie = await API.fetchMovie(movieId);
+        const credits = await API.fetchCredits(movieId);
+        // Get Directors
+        const directors = credits.crew.filter(
+          (member) => member.job === 'Director'
+        );
+
+        setState({
+          ...movie,
+          actors: credits.cast,
+          directors,
+        });
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+      }
+    };
+    fetchMovie();
+  }, [movieId]);
+
+  return { state, loading, error };
 };

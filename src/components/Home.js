@@ -9,7 +9,7 @@ import Spinner from './Spinner';
 import SearchBar from './SearchBar';
 import Button from './Button';
 //Hooks
-import { useMovieFetch } from '../hooks/useMovieFetch';
+import { useMovieFetch } from '../hooks/useHomeFetch';
 
 //Image
 import Noimage from '../images/no_image.jpg';
