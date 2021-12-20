@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import API from '../API';
 
@@ -10,9 +10,9 @@ const initialState = {
 };
 
 export const useMovieFetch = () => {
-  const [state, setState] = useState();
+  const [state, setState] = useState(initialState);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState(false);
 
   const fetchMovies = async (page, searchTerm = '') => {
     try {
