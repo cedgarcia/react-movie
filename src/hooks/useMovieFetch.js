@@ -15,6 +15,9 @@ export const useMovieFetch = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  //Button fetching
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   console.log(searchTerm);
   const fetchMovies = async (page, searchTerm = '') => {
     try {
@@ -37,5 +40,12 @@ export const useMovieFetch = () => {
     setState(initialState);
     fetchMovies(1, searchTerm);
   }, [searchTerm]);
-  return { state, loading, error, setSearchTerm, searchTerm };
+
+  // load more
+  useEffect(() => {
+    if (!isLoadingMore) return;
+    fetchMovies(state.page + 1, searchTerm);
+    setIsLoadingMore(false);
+  }, [isLoadingMore, searchTerm, state.page]);
+  return { state, loading, error, setSearchTerm, searchTerm, setIsLoadingMore };
 };

@@ -11,6 +11,8 @@ export const Wrapper = styled.div`
   border: 0;
   font-size: var(--fontBig);
   margin: 20px auto;
+  padding: 0.7rem;
+  text-align: center;
   transition: all 0.3s;
   outline: none;
   cursor: pointer;
